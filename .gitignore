@@ -3,3 +3,5 @@
 /impl/target/
 /systemtest/target/
 /xml-model/target/
+.idea
+.vscode
