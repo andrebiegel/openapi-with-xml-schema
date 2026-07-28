@@ -27,20 +27,27 @@
   </modules>
 
   <properties>
-    <maven.compiler.source>17</maven.compiler.source>
-    <maven.compiler.target>17</maven.compiler.target>
+    <!-- Java 8 als Sprach-/Bytecode-Level -->
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-    <jaxb-plugin.version>4.0.16</jaxb-plugin.version>
-    <jaxb-api.version>4.0.2</jaxb-api.version>
-    <jaxb-runtime.version>4.0.5</jaxb-runtime.version>
+    <!-- JAXB, javax-Variante (JAXB 2.3.x, wie im JDK 8 enthalten) -->
+    <jaxb-plugin.version>0.15.3</jaxb-plugin.version>
+    <jaxb-api.version>2.3.1</jaxb-api.version>
+    <jaxb-runtime.version>2.3.9</jaxb-runtime.version>
 
+    <!-- Hinweis: dieses Plugin selbst braucht zum Ausführen JDK 11+,
+         erzeugt aber Code, der mit source/target=1.8 kompiliert. -->
     <openapi-generator.version>7.8.0</openapi-generator.version>
-    <jakarta-ws-rs.version>3.1.0</jakarta-ws-rs.version>
+
+    <!-- JAX-RS, javax-Variante (JAX-RS 2.1 / Java EE 8) -->
+    <javax-ws-rs.version>2.1.1</javax-ws-rs.version>
     <swagger-annotations.version>2.2.22</swagger-annotations.version>
     <build-helper.version>3.6.0</build-helper.version>
 
-    <jersey.version>3.1.9</jersey.version>
+    <!-- Jersey 2.x = javax-Namensraum, laeuft auf Java 8 -->
+    <jersey.version>2.39</jersey.version>
     <junit.version>5.10.3</junit.version>
     <surefire.version>3.2.5</surefire.version>
     <failsafe.version>3.2.5</failsafe.version>

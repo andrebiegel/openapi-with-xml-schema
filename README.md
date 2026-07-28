@@ -1,5 +1,19 @@
 # order-service-parent
 
+## Variante: javax / Java 8
+
+Dieses Projekt ist auf die **javax-Namensraeume** (JAXB 2.3.x `javax.xml.bind`,
+JAX-RS 2.1 `javax.ws.rs`, Jersey 2.x) und **Java 8** als Ziel-Bytecode-Level
+(`maven.compiler.source/target=1.8`) ausgerichtet - bewusst NICHT die
+Jakarta-EE-9+-Umbenennung (`jakarta.*`).
+
+Wichtige Konsequenz: `openapi-generator-maven-plugin` 7.x selbst benoetigt
+zum **Ausfuehren** (also fuer den Build) ein JDK 11+, erzeugt dabei aber
+Code, der mit `javax.ws.rs` arbeitet und mit `source/target=1.8` kompiliert
+- also auf einer echten Java-8-Laufzeitumgebung lauffaehig ist. Wenn auch
+der Build selbst zwingend mit einem Java-8-JDK laufen muss, braucht ihr
+eine deutlich aeltere openapi-generator-Version (4.x/5.x).
+
 Multi-Modul-Maven-Projekt, das zwei Codegenerierungs-Schritte kombiniert:
 
 1. **`xml-model`**: generiert per JAXB (`jaxb-maven-plugin`, xjc) Java-Klassen

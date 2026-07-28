@@ -4,16 +4,25 @@
            targetNamespace="http://example.com/order"
            elementFormDefault="qualified">
 
-  <xs:element name="orderMessage" type="tns:OrderMessage"/>
-
-  <xs:complexType name="OrderMessage">
-    <xs:sequence>
-      <xs:element name="orderId" type="xs:string"/>
-      <xs:element name="customerName" type="xs:string"/>
-      <xs:element name="amount" type="xs:decimal"/>
-      <xs:element name="items" type="tns:OrderItem" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-  </xs:complexType>
+  <!--
+    Bewusst ein anonymer Complex-Type direkt im Element statt eines separat
+    benannten Complex-Types + Referenz: dadurch bindet XJC Element und
+    Java-Klasse 1:1 aneinander und generiert automatisch @XmlRootElement
+    auf der erzeugten Klasse "OrderMessage" (abgeleitet vom Element-Namen).
+    Ohne @XmlRootElement kann JAXB die Klasse zwar unmarshallen, aber nicht
+    marshallen (kein bekannter Root-Element-Name) - das war die Ursache des
+    vorherigen "MessageBodyWriter not found"-Fehlers.
+  -->
+  <xs:element name="orderMessage">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="orderId" type="xs:string"/>
+        <xs:element name="customerName" type="xs:string"/>
+        <xs:element name="amount" type="xs:decimal"/>
+        <xs:element name="items" type="tns:OrderItem" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 
   <xs:complexType name="OrderItem">
     <xs:sequence>
