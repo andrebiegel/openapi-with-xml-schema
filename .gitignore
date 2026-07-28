@@ -1,0 +1,5 @@
+# Project exclude paths
+/api/target/
+/impl/target/
+/systemtest/target/
+/xml-model/target/

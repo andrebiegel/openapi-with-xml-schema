@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.example</groupId>
+    <artifactId>order-service-parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>xml-model</artifactId>
+  <packaging>jar</packaging>
+  <name>xml-model (aus XSD generierte JAXB-Klassen)</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>jakarta.xml.bind</groupId>
+      <artifactId>jakarta.xml.bind-api</artifactId>
+      <version>${jaxb-api.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jaxb</groupId>
+      <artifactId>jaxb-runtime</artifactId>
+      <version>${jaxb-runtime.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <!-- Generiert Java-Klassen aus allen XSDs unter src/main/resources/xsd -->
+      <plugin>
+        <groupId>org.jvnet.jaxb</groupId>
+        <artifactId>jaxb-maven-plugin</artifactId>
+        <version>${jaxb-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>generate-xml-model</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <schemaDirectory>${project.basedir}/src/main/resources/xsd</schemaDirectory>
+          <schemaIncludes>
+            <include>*.xsd</include>
+          </schemaIncludes>
+          <generatePackage>com.example.xml.model</generatePackage>
+          <generateDirectory>${project.build.directory}/generated-sources/jaxb</generateDirectory>
+          <!-- sorgt dafür, dass bei mehreren XSDs mit gemeinsamen Typen kein Konflikt entsteht -->
+          <extension>true</extension>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.example</groupId>
+    <artifactId>order-service-parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>api</artifactId>
+  <packaging>jar</packaging>
+  <name>api (aus OpenAPI generierte JAX-RS-Interfaces)</name>
+
+  <dependencies>
+    <!-- Die XSD-generierten JAXB-Klassen -->
+    <dependency>
+      <groupId>com.example</groupId>
+      <artifactId>xml-model</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>jakarta.ws.rs</groupId>
+      <artifactId>jakarta.ws.rs-api</artifactId>
+      <version>${jakarta-ws-rs.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.swagger.core.v3</groupId>
+      <artifactId>swagger-annotations-jakarta</artifactId>
+      <version>${swagger-annotations.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>jakarta.validation</groupId>
+      <artifactId>jakarta.validation-api</artifactId>
+      <version>3.0.1</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>jakarta.annotation</groupId>
+      <artifactId>jakarta.annotation-api</artifactId>
+      <version>2.1.1</version>
+      <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-annotations</artifactId>
+        <version>2.15.2</version>
+        <scope>provided</scope>
+      </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.openapitools</groupId>
+        <artifactId>openapi-generator-maven-plugin</artifactId>
+        <version>${openapi-generator.version}</version>
+        <executions>
+          <execution>
+            <id>generate-jaxrs-api</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <inputSpec>${project.basedir}/src/main/resources/openapi/api.yaml</inputSpec>
+              <generatorName>jaxrs-spec</generatorName>
+
+              <apiPackage>com.example.api</apiPackage>
+              <modelPackage>com.example.api.model</modelPackage>
+              <invokerPackage>com.example.api.invoker</invokerPackage>
+
+              <generateApis>true</generateApis>
+              <generateModels>true</generateModels>
+              <generateSupportingFiles>false</generateSupportingFiles>
+
+              <configOptions>
+                <interfaceOnly>true</interfaceOnly>
+                <useJakartaEe>true</useJakartaEe>
+                <useSwaggerAnnotations>false</useSwaggerAnnotations>
+                <dateLibrary>java8</dateLibrary>
+                <sourceFolder>src/gen/java</sourceFolder>
+              </configOptions>
+
+              <!--
+                Das ist der entscheidende Teil:
+                Für das Schema "OrderMessage" wird KEINE eigene Modellklasse
+                generiert, sondern die bereits aus der XSD generierte
+                JAXB-Klasse referenziert.
+              -->
+              <importMappings>
+                <importMapping>OrderMessage=com.example.xml.model.OrderMessage</importMapping>
+              </importMappings>
+              <schemaMappings>
+                <schemaMapping>OrderMessage=com.example.xml.model.OrderMessage</schemaMapping>
+              </schemaMappings>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Generierte Sources dem Compiler bekannt machen -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>${build-helper.version}</version>
+        <executions>
+          <execution>
+            <id>add-generated-sources</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>${project.build.directory}/generated-sources/openapi/src/gen/java</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

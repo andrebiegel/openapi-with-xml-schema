@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://example.com/order"
+           targetNamespace="http://example.com/order"
+           elementFormDefault="qualified">
+
+  <xs:element name="orderMessage" type="tns:OrderMessage"/>
+
+  <xs:complexType name="OrderMessage">
+    <xs:sequence>
+      <xs:element name="orderId" type="xs:string"/>
+      <xs:element name="customerName" type="xs:string"/>
+      <xs:element name="amount" type="xs:decimal"/>
+      <xs:element name="items" type="tns:OrderItem" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="OrderItem">
+    <xs:sequence>
+      <xs:element name="sku" type="xs:string"/>
+      <xs:element name="quantity" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>

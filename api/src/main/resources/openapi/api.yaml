@@ -1,0 +1,54 @@
+openapi: 3.0.3
+info:
+  title: Order Service API
+  version: 1.0.0
+paths:
+  /orders:
+    post:
+      tags:
+        - Orders
+      operationId: createOrder
+      summary: Nimmt eine Bestellung als XML entgegen
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/OrderMessage'
+      responses:
+        '200':
+          description: Bestellung angenommen
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/OrderMessage'
+        '400':
+          description: Ungültige Anfrage
+
+components:
+  schemas:
+    # Platzhalter-Schema: der eigentliche Java-Typ wird über
+    # importMappings / schemaMappings im openapi-generator-maven-plugin
+    # auf com.example.xml.model.OrderMessage (aus der XSD generiert) gemappt.
+    # Der Inhalt hier dient nur der Dokumentation/Lesbarkeit der Spec.
+    OrderMessage:
+      type: object
+      xml:
+        name: orderMessage
+        namespace: http://example.com/order
+      properties:
+        orderId:
+          type: string
+        customerName:
+          type: string
+        amount:
+          type: number
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              sku:
+                type: string
+              quantity:
+                type: integer

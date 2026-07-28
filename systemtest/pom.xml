@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.example</groupId>
+    <artifactId>order-service-parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>systemtest</artifactId>
+  <packaging>jar</packaging>
+  <name>systemtest (Ende-zu-Ende-Systemtest ueber echtes HTTP/XML)</name>
+
+  <!--
+    Dieses Modul enthaelt bewusst keine Unit-Tests (kein *Test.java),
+    sondern nur einen Systemtest (*IT.java), der ueber maven-failsafe-plugin
+    in der Phase "integration-test"/"verify" laeuft:
+
+      mvn verify -pl systemtest -am
+
+    Der Test startet den echten, eingebetteten Server aus dem impl-Modul
+    (kein Mocking!), schickt eine echte HTTP-POST-Anfrage mit XML-Body
+    und prueft die XML-Antwort per JAXB-Unmarshalling.
+  -->
+  <dependencies>
+    <dependency>
+      <groupId>com.example</groupId>
+      <artifactId>impl</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.example</groupId>
+      <artifactId>xml-model</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <!-- Dieses Modul soll NICHT ueber "mvn test"/Surefire laufen,
+           sondern nur ueber "mvn verify"/Failsafe. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${surefire.version}</version>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>${failsafe.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

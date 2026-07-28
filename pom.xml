@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.example</groupId>
+  <artifactId>order-service-parent</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <!--
+    Reactor-Reihenfolge: Maven baut die Module automatisch in der
+    richtigen Reihenfolge, weil "api" von "xml-model" abhängt.
+    xml-model wird also immer zuerst gebaut/generiert.
+  -->
+  <!--
+    impl haengt von api und xml-model ab, systemtest von impl.
+    Der Reactor baut daher automatisch in der Reihenfolge:
+    xml-model -> api -> impl -> systemtest
+  -->
+  <modules>
+    <module>xml-model</module>
+    <module>api</module>
+    <module>impl</module>
+    <module>systemtest</module>
+  </modules>
+
+  <properties>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <jaxb-plugin.version>4.0.16</jaxb-plugin.version>
+    <jaxb-api.version>4.0.2</jaxb-api.version>
+    <jaxb-runtime.version>4.0.5</jaxb-runtime.version>
+
+    <openapi-generator.version>7.8.0</openapi-generator.version>
+    <jakarta-ws-rs.version>3.1.0</jakarta-ws-rs.version>
+    <swagger-annotations.version>2.2.22</swagger-annotations.version>
+    <build-helper.version>3.6.0</build-helper.version>
+
+    <jersey.version>3.1.9</jersey.version>
+    <junit.version>5.10.3</junit.version>
+    <surefire.version>3.2.5</surefire.version>
+    <failsafe.version>3.2.5</failsafe.version>
+  </properties>
+</project>
